@@ -1,0 +1,66 @@
+version: '3.1'
+services:
+  postgresql-post:
+    image: postgres
+    ports:
+      - "5441:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - post-network
+  post-service-api:
+    image: post-service
+    ports:
+      - "8092:8081"
+    depends_on:
+      postgresql-post:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-post:5432/postgres?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - post-network
+      - post-user-network
+  postgresql-user:
+    image: postgres
+    ports:
+      - "5440:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - user-network
+  user-service-api:
+    image: user-service
+    ports:
+      - "8091:8080"
+    depends_on:
+      postgresql-user:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-user:5432/postgres?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - user-network
+      - post-user-network
+networks:
+  post-network:
+  user-network:
+  post-user-network:
