@@ -16,7 +16,7 @@ services:
     networks:
       - post-network
   post-service-api:
-    image: post-service
+    image: epammikhailkrasikov/post-service
     ports:
       - "8092:8081"
     depends_on:
@@ -47,7 +47,7 @@ services:
     networks:
       - user-network
   user-service-api:
-    image: user-service
+    image: epammikhailkrasikov/user-service
     ports:
       - "8091:8080"
     depends_on:
