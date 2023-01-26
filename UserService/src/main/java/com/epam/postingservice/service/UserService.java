@@ -12,5 +12,5 @@ public interface UserService {
 
     User update(Long id, String username);
 
-    User iterateNumberOfPosts(Long id);
+    User updatePosts(Long id);
 }

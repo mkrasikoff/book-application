@@ -14,21 +14,23 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - posting-network
+      - post-network
   post-service-api:
     image: post-service
     ports:
-      - "8092:8080"
+      - "8092:8081"
     depends_on:
       postgresql-post:
         condition: service_healthy
     environment:
+      - USER_API=http://user-service-api:8080/users/
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-post:5432/postgres?autoReconnect=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
-      - posting-network
+      - post-network
+      - post-user-network
   postgresql-user:
     image: postgres
     ports:
@@ -43,7 +45,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - posting-network
+      - user-network
   user-service-api:
     image: user-service
     ports:
@@ -57,6 +59,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
-      - posting-network
+      - user-network
+      - post-user-network
 networks:
-  posting-network:
+  post-network:
+  user-network:
+  post-user-network:

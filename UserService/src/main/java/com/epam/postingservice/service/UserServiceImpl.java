@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User iterateNumberOfPosts(Long id) {
+    public User updatePosts(Long id) {
         try {
             User oldUser = userRepository.findById(id)
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
