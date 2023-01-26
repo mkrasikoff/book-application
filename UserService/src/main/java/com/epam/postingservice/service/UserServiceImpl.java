@@ -54,18 +54,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updatePosts(Long id) {
-        try {
-            User oldUser = userRepository.findById(id)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        User oldUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-            User updatedUser = new User();
-            updatedUser.setId(id);
-            updatedUser.setUsername(oldUser.getUsername());
-            updatedUser.setAmountOfPosts(oldUser.getAmountOfPosts() + 1);
+        User updatedUser = new User();
+        updatedUser.setId(id);
+        updatedUser.setUsername(oldUser.getUsername());
+        updatedUser.setAmountOfPosts(oldUser.getAmountOfPosts() + 1);
 
-            return userRepository.save(updatedUser);
-        } catch (EmptyResultDataAccessException exception) {
-            return null;
-        }
+        return userRepository.save(updatedUser);
     }
 }

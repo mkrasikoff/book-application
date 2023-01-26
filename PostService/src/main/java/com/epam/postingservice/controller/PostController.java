@@ -1,5 +1,7 @@
 package com.epam.postingservice.controller;
 
+import com.epam.postingservice.dto.SaveDTO;
+import com.epam.postingservice.dto.UpdateDTO;
 import com.epam.postingservice.entity.Post;
 import com.epam.postingservice.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +25,9 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public Post save(@RequestParam("authorId") Long authorId, @RequestParam("text") String text) {
+    public Post save(@RequestBody SaveDTO saveDTO) {
+        Long authorId = saveDTO.getAuthorId();
+        String text = saveDTO.getText();
         return postService.save(authorId, text);
     }
 
@@ -41,7 +45,8 @@ public class PostController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Post update(@PathVariable Long id, @RequestParam("text") String text) {
+    public Post update(@PathVariable Long id, @RequestBody UpdateDTO updateDTO) {
+        String text = updateDTO.getText();
         return postService.update(id, text);
     }
 }

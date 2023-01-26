@@ -5,6 +5,8 @@ import com.epam.postingservice.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import java.net.URI;
-import java.net.http.HttpClient;
 import java.time.LocalDate;
 
 @Service
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private static final Logger LOGGER = LogManager.getLogger(PostServiceImpl.class);
 
     @Value("${api.user.url}")
     private String userServiceUrl;
@@ -40,7 +42,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private void updateUser(Long authorId) {
-        String address = userServiceUrl + authorId + "/posts" + "?_method=patch";
+        String address = userServiceUrl + authorId + "/posts";
         URI uri = URI.create(address);
 
         CloseableHttpClient client = HttpClients.createDefault();
@@ -51,7 +53,7 @@ public class PostServiceImpl implements PostService {
             restTemplate.patchForObject(uri, null, Object.class);
         }
         catch (HttpClientErrorException.NotFound exception) {
-            return;
+            LOGGER.warn("New post was created, but user with this authorId was not found.");
         }
     }
 
