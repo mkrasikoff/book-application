@@ -14,9 +14,9 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - post-network
-  post-service-api:
-    image: epammikhailkrasikov/post-service
+      - book-network
+  book-service-api:
+    image: book-service
     ports:
       - "8092:8081"
     depends_on:
@@ -29,8 +29,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
-      - post-network
-      - post-user-network
+      - book-network
+      - book-user-network
   postgresql-user:
     image: postgres
     ports:
@@ -47,7 +47,7 @@ services:
     networks:
       - user-network
   user-service-api:
-    image: epammikhailkrasikov/user-service
+    image: user-service
     ports:
       - "8091:8080"
     depends_on:
@@ -60,8 +60,8 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - user-network
-      - post-user-network
+      - book-user-network
 networks:
-  post-network:
+  book-network:
   user-network:
-  post-user-network:
+  book-user-network:
