@@ -1,7 +1,5 @@
 package com.mkrasikoff.bookservice.controller;
 
-import com.mkrasikoff.bookservice.dto.SaveDTO;
-import com.mkrasikoff.bookservice.dto.UpdateDTO;
 import com.mkrasikoff.bookservice.entity.Book;
 import com.mkrasikoff.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +22,9 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Book save(@RequestBody SaveDTO saveDTO) {
-        Long authorId = saveDTO.getAuthorId();
-        String text = saveDTO.getText();
-        return bookService.save(authorId, text);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Book save(@RequestBody Book book) {
+        return bookService.save(book);
     }
 
     @GetMapping("/{id}")
@@ -45,8 +41,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Book update(@PathVariable Long id, @RequestBody UpdateDTO updateDTO) {
-        String text = updateDTO.getText();
-        return bookService.update(id, text);
+    public Book update(@PathVariable Long id, @RequestBody Book book) {
+        return bookService.update(id, book);
     }
 }
