@@ -1,13 +1,11 @@
 package com.mkrasikoff.userservice.controller;
 
-import com.mkrasikoff.userservice.dto.UserDTO;
 import com.mkrasikoff.userservice.entity.User;
 import com.mkrasikoff.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,10 +22,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public User save(@RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        return userService.save(username);
+    @ResponseStatus(HttpStatus.CREATED)
+    public User save(@RequestBody User user) {
+        return userService.save(user);
     }
 
     @GetMapping("/{id}")
@@ -37,21 +34,14 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
 
-
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        return userService.update(id, username);
-    }
-
-    @PatchMapping("/{id}/books")
-    public User updateBooks(@PathVariable Long id) {
-        return userService.updateBooks(id);
+    public User update(@PathVariable Long id, @RequestBody User user) {
+        return userService.update(id, user);
     }
 }

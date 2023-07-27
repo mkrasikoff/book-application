@@ -15,11 +15,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User save(String username) {
-        User user = new User();
-        user.setUsername(username);
-        user.setAmountOfBooks(0L);
-
+    public User save(User user) {
         return userRepository.save(user);
     }
 
@@ -31,37 +27,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long id) {
-        try {
+        if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
-        }
-        catch (EmptyResultDataAccessException exception) {
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
     }
 
     @Override
-    public User update(Long id, String username) {
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        User updatedUser = new User();
-        updatedUser.setId(id);
-        updatedUser.setUsername(username);
-        updatedUser.setAmountOfBooks(oldUser.getAmountOfBooks());
-
-        return userRepository.save(updatedUser);
-    }
-
-    @Override
-    public User updateBooks(Long id) {
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        User updatedUser = new User();
-        updatedUser.setId(id);
-        updatedUser.setUsername(oldUser.getUsername());
-        updatedUser.setAmountOfBooks(oldUser.getAmountOfBooks() + 1);
-
-        return userRepository.save(updatedUser);
+    public User update(Long id, User newUser) {
+        return userRepository.findById(id).map(user -> {
+            user.setUsername(newUser.getUsername());
+            user.setPassword(newUser.getPassword());
+            user.setEmail(newUser.getEmail());
+            return userRepository.save(user);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }
