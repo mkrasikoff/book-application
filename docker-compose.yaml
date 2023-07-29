@@ -15,6 +15,7 @@ services:
       retries: 5
     networks:
       - book-network
+
   book-service-api:
     image: book-service
     ports:
@@ -31,6 +32,7 @@ services:
     networks:
       - book-network
       - book-user-network
+
   postgresql-user:
     image: postgres
     ports:
@@ -46,6 +48,7 @@ services:
       retries: 5
     networks:
       - user-network
+
   user-service-api:
     image: user-service
     ports:
@@ -60,6 +63,13 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     networks:
       - user-network
+      - book-user-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8083:80"
+    networks:
       - book-user-network
 networks:
   book-network:
