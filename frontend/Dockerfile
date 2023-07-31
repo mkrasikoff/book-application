@@ -1,10 +1,10 @@
 # Stage 1: Build the Angular application
-FROM node:14 AS build
+FROM node:16 as build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN ng build --prod
+RUN npx ng build --configuration production
 
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
