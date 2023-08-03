@@ -1,0 +1,29 @@
+<h2>Books Management</h2>
+
+<!-- Displaying Selected Book -->
+<div *ngIf="selectedBook">
+  <h3>Selected Book</h3>
+  <p>Title: {{ selectedBook.title }}</p>
+  <p>Author ID: {{ selectedBook.authorId }}</p>
+  <p>Description: {{ selectedBook.description }}</p>
+  <p>Rating: {{ selectedBook.rating }}</p>
+  <img *ngIf="selectedBook.imageUrl" [src]="selectedBook.imageUrl" alt="{{ selectedBook.title }}" />
+</div>
+
+<!-- Form to Create/Update Book -->
+<form (ngSubmit)="createOrUpdateBook()">
+  <input type="text" [(ngModel)]="formBook.title" name="title" placeholder="Title" />
+  <input type="text" [(ngModel)]="formBook.authorId" name="authorId" placeholder="Author ID" />
+  <textarea [(ngModel)]="formBook.description" name="description" placeholder="Description"></textarea>
+  <input type="number" [(ngModel)]="formBook.rating" name="rating" placeholder="Rating" />
+  <input type="text" [(ngModel)]="formBook.imageUrl" name="imageUrl" placeholder="Image URL" />
+  <button type="submit">Submit</button>
+</form>
+
+<!-- List of Books (Placeholder for now) -->
+<div *ngFor="let book of books">
+  <p>{{ book.title }}</p>
+  <button (click)="getBook(book.id)">View</button>
+  <button (click)="editBook(book)">Edit</button>
+  <button (click)="deleteBook(book.id)">Delete</button>
+</div>
