@@ -8,4 +8,5 @@ RUN npx ng build --configuration production
 
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
+COPY nginx-custom.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/frontend /usr/share/nginx/html
