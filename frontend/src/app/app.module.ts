@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { BooksComponent } from './books/books.component';
 import { BookService } from "./book.service";
+import { UsersComponent } from './users/users.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     WelcomeComponent,
-    BooksComponent
+    BooksComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
