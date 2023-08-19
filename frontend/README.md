@@ -1,27 +1,63 @@
-# Frontend
+# Frontend - Angular Project
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.6.
+This frontend project is developed using Angular and serves as the UI for managing books and users.
 
-## Development server
+## Table of Contents
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Getting Started](#getting-started)
+4. [Project Structure](#project-structure)
+5. [Development](#development)
+6. [Contributing](#contributing)
+7. [License](#license)
 
-## Code scaffolding
+## Features
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Book Management**: View, add, update, and delete books.
+- **User Management**: View, add, update, and delete users.
 
-## Build
+## Prerequisites
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- [Node.js](https://nodejs.org/) and npm (comes bundled with Node.js)
+- Angular CLI: Install it globally using `npm install -g @angular/cli`
 
-## Running unit tests
+## Getting Started
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. **Clone the Repository**
 
-## Running end-to-end tests
+   ```bash
+   git clone https://github.com/your-username/frontend.git
+   cd frontend
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Install Dependencies
 
-## Further help
+Run the following command:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```bash
+npm install
+```
+
+The application should be accessible at http://localhost:4200.
+
+## Project Structure
+The main folders in the project are:
+
+1. **src/app**: Contains the main components, services, and models for the application.
+2. **book**: Components and services related to book management.
+3. **user**: Components and services related to user management.
+4. **welcome**: The welcome page component.
+
+## Development
+
+To generate a new component, use:
+
+```bash
+ng generate component component-name
+```
+
+To generate a new service, use:
+
+```bash
+ng generate service service-name
+```
