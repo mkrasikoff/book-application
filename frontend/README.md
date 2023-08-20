@@ -29,6 +29,7 @@ This frontend project is developed using Angular and serves as the UI for managi
    ```bash
    git clone https://github.com/your-username/frontend.git
    cd frontend
+   ```
 
 ## Install Dependencies
 
