@@ -9,6 +9,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { BooksComponent } from './books/books.component';
 import { BookService } from "./book.service";
 import { UsersComponent } from './users/users.component';
+import { UserService } from './user.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { UsersComponent } from './users/users.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [BookService],
+  providers: [BookService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

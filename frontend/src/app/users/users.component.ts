@@ -4,7 +4,7 @@ import { User } from '../user.model';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './user.component.html'
+  templateUrl: './users.component.html'
 })
 export class UsersComponent implements OnInit {
 
