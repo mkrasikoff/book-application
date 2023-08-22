@@ -1,16 +1,15 @@
-# Frontend - Angular Project
+# Frontend part - Angular Project
 
-This frontend project is developed using Angular and serves as the UI for managing books and users.
+This frontend project is developed using Angular and serves as the UI for managing books and users. It interfaces with two backend services: `book-service` and `user-service`, both developed using Java Spring.
 
 ## Table of Contents
 
 1. [Features](#features)
 2. [Prerequisites](#prerequisites)
 3. [Getting Started](#getting-started)
-4. [Project Structure](#project-structure)
-5. [Development](#development)
-6. [Contributing](#contributing)
-7. [License](#license)
+4. [Install Dependencies](#install-dependencies)
+5. [Project Structure](#project-structure)
+6. [Testing](#testing)
 
 ## Features
 
@@ -39,7 +38,7 @@ Run the following command:
 npm install
 ```
 
-The application should be accessible at http://localhost:4200.
+The application should be accessible at http://localhost:8083.
 
 ## Project Structure
 The main folders in the project are:
@@ -49,16 +48,22 @@ The main folders in the project are:
 3. **user**: Components and services related to user management.
 4. **welcome**: The welcome page component.
 
-## Development
+## Testing
 
-To generate a new component, use:
+Open frontend directory. Use command below to build application:
 
 ```bash
-ng generate component component-name
+ng build --configuration production
 ```
 
-To generate a new service, use:
+After that, you need to go to book-application directory and build new images:
 
 ```bash
-ng generate service service-name
+docker-compose build --no-cache
+```
+
+And run new images using docker-compose:
+
+```bash
+docker-compose up
 ```
