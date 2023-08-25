@@ -1,24 +1,52 @@
-<h2>User Management</h2>
+<div class="container mt-4">
+  <h2 class="display-4 text-center">User Management</h2>
 
-<!-- Displaying Selected User -->
-<div *ngIf="selectedUser">
-  <h3>Selected User</h3>
-  <p>Username: {{ selectedUser.username }}</p>
-  <p>Email: {{ selectedUser.email }}</p>
-</div>
+  <!-- Alert placeholder for showing messages (e.g. User Created, User Deleted) -->
+  <div id="alert-placeholder"></div>
 
-<!-- Form to Create/Update User -->
-<form (ngSubmit)="createOrUpdateUser()">
-  <input type="text" [(ngModel)]="formUser.username" name="username" placeholder="Username" />
-  <input type="password" [(ngModel)]="formUser.password" name="password" placeholder="Password" />
-  <input type="email" [(ngModel)]="formUser.email" name="email" placeholder="Email" />
-  <button type="submit">Submit</button>
-</form>
+  <!-- Displaying Selected User -->
+  <div *ngIf="selectedUser" class="card mt-4">
+    <div class="card-body">
+      <h3 class="card-title">Selected User</h3>
+      <p class="card-text"><strong>Username:</strong> {{ selectedUser.username }}</p>
+      <p class="card-text"><strong>Email:</strong> {{ selectedUser.email }}</p>
+    </div>
+  </div>
 
-<!-- List of Users (Placeholder for now) -->
-<div *ngFor="let user of users">
-  <p>{{ user.username }}</p>
-  <button (click)="getUser(user.id)">View</button>
-  <button (click)="editUser(user)">Edit</button>
-  <button (click)="deleteUser(user.id)">Delete</button>
+  <!-- Form to Create/Update User -->
+  <form (ngSubmit)="createOrUpdateUser()" class="mt-4">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" [(ngModel)]="formUser.username" name="username" class="form-control" placeholder="Username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" [(ngModel)]="formUser.password" name="password" class="form-control" placeholder="Password">
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" [(ngModel)]="formUser.email" name="email" class="form-control" placeholder="Email">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <!-- List of Users -->
+  <table class="table table-striped mt-5">
+    <thead>
+    <tr>
+      <th>Username</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.username }}</td>
+      <td>
+        <button (click)="getUser(user.id)" class="btn btn-info btn-sm">View</button>
+        <button (click)="editUser(user)" class="btn btn-warning btn-sm">Edit</button>
+        <button (click)="deleteUser(user.id)" class="btn btn-danger btn-sm">Delete</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </div>
