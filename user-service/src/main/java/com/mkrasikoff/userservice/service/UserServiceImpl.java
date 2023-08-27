@@ -3,10 +3,11 @@ package com.mkrasikoff.userservice.service;
 import com.mkrasikoff.userservice.entity.User;
 import com.mkrasikoff.userservice.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +43,15 @@ public class UserServiceImpl implements UserService {
             user.setEmail(newUser.getEmail());
             return userRepository.save(user);
         }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public List<User> getAll() {
+        List<User> userList = new ArrayList<>();
+
+        Iterable<User> users = userRepository.findAll();
+        users.forEach(userList::add);
+
+        return userList;
     }
 }

@@ -1,6 +1,7 @@
 package com.mkrasikoff.userservice.service;
 
 import com.mkrasikoff.userservice.entity.User;
+import java.util.List;
 
 public interface UserService {
 
@@ -11,4 +12,6 @@ public interface UserService {
     void delete(Long id);
 
     User update(Long id, User newUser);
+
+    List<User> getAll();
 }

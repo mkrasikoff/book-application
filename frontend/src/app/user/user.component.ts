@@ -15,6 +15,7 @@ export class UserComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit(): void {
+    this.getAllUsers();
   }
 
   emptyUser(): User {
@@ -68,6 +69,12 @@ export class UserComponent implements OnInit {
       if (index > -1) {
         this.users.splice(index, 1);
       }
+    });
+  }
+
+  getAllUsers(): void {
+    this.userService.getAllUsers().subscribe(users => {
+      this.users = users;
     });
   }
 }

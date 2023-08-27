@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,5 +44,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public User update(@PathVariable Long id, @RequestBody User user) {
         return userService.update(id, user);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> getAll() {
+        return userService.getAll();
     }
 }
