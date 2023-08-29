@@ -34,24 +34,37 @@ To run the entire application stack (book-service, user-service, and frontend) w
    git clone https://github.com/your-username/book-application.git
    cd book-application
    ```
-   
-2. Build and start the services:
 
-   ```bash
-   docker-compose build
-   docker-compose up
-   ```
+## Port Conventions
+We use specific ranges of ports for different types of services:
 
-This will start:
+| Service Type   | Port Range |
+|----------------|------------|
+| Frontend       | `808x`     |
+| Backend (APIs) | `818x`     |
+| Databases      | `828x`     |
+| Debug          | `838x`     |
 
-- The book-service on port 8092.
-- The user-service on port 8091.
-- The frontend on port 8083.
-- PostgreSQL databases for both the book-service and the user-service on ports 5441 and 5440 respectively.
+## Service Ports
 
-You can access the frontend at http://localhost:8083.
+Here is the mapping of each service to its accessible port:
 
-3. Stopping services:
+| Service Name                   | External Port | Internal Port |
+|--------------------------------|---------------|---------------|
+| Frontend                       | 8080          | 80            |
+| Book Service API               | 8181          | 8080          |
+| User Service API               | 8182          | 8080          |
+| PostgreSQL for Book Service    | 8281          | 5432          |
+| PostgreSQL for User Service    | 8282          | 5432          |
+
+## Networks
+- `book-network`: For book service and its database.
+- `user-network`: For user service and its database.
+- `book-user-network`: For services that interact between books and users.
+
+- You can access the frontend at http://localhost:8080.
+
+2. Stopping services:
 
    ```bash
    docker-compose down
