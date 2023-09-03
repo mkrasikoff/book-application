@@ -26,7 +26,7 @@ services:
         condition: service_healthy
     environment:
       - USER_API=http://user-service-api:8080/users/
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-post:5432/postgres?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql-book:5432/postgres?autoReconnect=true&useSSL=false
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update

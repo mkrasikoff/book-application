@@ -8,7 +8,7 @@ import { User } from './user.model';
 })
 export class UserService {
 
-  private baseUrl = 'http://localhost:8182/users';
+  private baseUrl = 'http://localhost:8182/users';  // Replace localhost with your Docker host IP if needed
 
   constructor(private http: HttpClient) { }
 
