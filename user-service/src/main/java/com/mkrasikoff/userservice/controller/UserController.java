@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +26,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User save(@RequestBody User user) {
+    public User save(@Valid @RequestBody User user) {
         return userService.save(user);
     }
 
@@ -42,7 +44,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User update(@PathVariable Long id, @RequestBody User user) {
+    public User update(@PathVariable Long id, @Valid @RequestBody User user) {
         return userService.update(id, user);
     }
 

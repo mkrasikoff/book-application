@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,12 +23,15 @@ public class User {
     private long id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 3, max = 25, message = "Username must be between 3 and 25 characters.")
     private String username;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 25, message = "Password must be between 3 and 25 characters.")
     private String password;
 
     @Column(nullable = false, unique = true)
+    @Email(message = "Email should be valid.")
     private String email;
 
     @Column(name = "created_at")

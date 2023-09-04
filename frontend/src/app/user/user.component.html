@@ -17,16 +17,33 @@
   <form (ngSubmit)="createOrUpdateUser()" class="mt-4">
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" id="username" [(ngModel)]="formUser.username" name="username" class="form-control" placeholder="Username">
+      <input type="text" id="username" [(ngModel)]="formUser.username" name="username" class="form-control" required minlength="3" maxlength="25" placeholder="Username" #usernameCtrl="ngModel">
+      <div *ngIf="usernameCtrl.errors && usernameCtrl.touched" class="text-danger">
+        <div *ngIf="usernameCtrl.errors['required']">Username is required.</div>
+        <div *ngIf="usernameCtrl.errors['minlength']">Username must be at least 3 characters long.</div>
+        <div *ngIf="usernameCtrl.errors['maxlength']">Username must be no more than 25 characters long.</div>
+      </div>
     </div>
+
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" [(ngModel)]="formUser.password" name="password" class="form-control" placeholder="Password">
+      <input type="password" id="password" [(ngModel)]="formUser.password" name="password" class="form-control" required minlength="3" maxlength="25" placeholder="Password" #passwordCtrl="ngModel">
+      <div *ngIf="passwordCtrl.errors && passwordCtrl.touched" class="text-danger">
+        <div *ngIf="passwordCtrl.errors['required']">Password is required.</div>
+        <div *ngIf="passwordCtrl.errors['minlength']">Password must be at least 3 characters long.</div>
+        <div *ngIf="passwordCtrl.errors['maxlength']">Password must be no more than 25 characters long.</div>
+      </div>
     </div>
+
     <div class="form-group">
       <label for="email">Email</label>
-      <input type="email" id="email" [(ngModel)]="formUser.email" name="email" class="form-control" placeholder="Email">
+      <input type="email" id="email" [(ngModel)]="formUser.email" name="email" class="form-control" required placeholder="Email" #emailCtrl="ngModel">
+      <div *ngIf="emailCtrl.errors && emailCtrl.touched" class="text-danger">
+        <div *ngIf="emailCtrl.errors['required']">Email is required.</div>
+        <div *ngIf="emailCtrl.errors['email']">Invalid email.</div>
+      </div>
     </div>
+
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 

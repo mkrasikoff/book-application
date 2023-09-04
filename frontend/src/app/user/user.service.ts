@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
 import { User } from './user.model';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { User } from './user.model';
 })
 export class UserService {
 
-  private baseUrl = 'http://localhost:8182/users';  // Replace localhost with your Docker host IP if needed
+  private baseUrl = 'http://localhost:8182/users';
 
   constructor(private http: HttpClient) { }
 
@@ -17,11 +17,25 @@ export class UserService {
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl, user);
+    return this.http.post<User>(this.baseUrl, user).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          alert("Validation Error: " + error.error);
+        }
+        return throwError(error);
+      })
+    );
   }
 
   updateUser(id: number, user: User): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${id}`, user);
+    return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 400) {
+          alert("Validation Error: " + error.error);
+        }
+        return throwError(error);
+      })
+    );
   }
 
   deleteUser(id: number): Observable<void> {
