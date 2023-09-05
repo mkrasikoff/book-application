@@ -3,7 +3,9 @@ package com.mkrasikoff.userservice.controller;
 import com.mkrasikoff.userservice.entity.User;
 import com.mkrasikoff.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +27,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User save(@Valid @RequestBody User user) {
-        return userService.save(user);
+    public ResponseEntity<?> save(@Valid @RequestBody User user) {
+        try {
+            User newUser = userService.save(user);
+            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException e) {
+            return new ResponseEntity<>("Username or email already exists.", HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/{id}")

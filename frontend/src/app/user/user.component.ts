@@ -45,22 +45,36 @@ export class UserComponent implements OnInit {
     } else {
       this.createUser(this.formUser);
     }
-    this.formUser = this.emptyUser();
   }
 
   createUser(user: User): void {
-    this.userService.createUser(user).subscribe(newUser => {
-      this.users.push(newUser);
-    });
+    this.userService.createUser(user).subscribe(
+      newUser => {
+        this.users.push(newUser);
+        this.formUser = this.emptyUser();
+      },
+      error => {
+        if (error.status === 409) {
+          alert('Username or email already exists.');
+        } else {
+          console.error(error);
+        }
+      }
+    );
   }
 
   updateUser(id: number, user: User): void {
     this.userService.updateUser(id, user).subscribe(updatedUser => {
-      const index = this.users.findIndex(u => u.id === id);
-      if (index > -1) {
-        this.users[index] = updatedUser;
+        const index = this.users.findIndex(u => u.id === id);
+        if (index > -1) {
+          this.users[index] = updatedUser;
+          this.formUser = this.emptyUser();
+        }
+      },
+      error => {
+        console.error(error);
       }
-    });
+    );
   }
 
   deleteUser(id: number): void {
