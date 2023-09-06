@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,12 +31,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> save(@Valid @RequestBody User user) {
         try {
-            User newUser = userService.save(user);
-            return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-        } catch (DataIntegrityViolationException e) {
-            return new ResponseEntity<>("Username or email already exists.", HttpStatus.CONFLICT);
+            User savedUser = userService.save(user);
+            return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Conflict: Username or email already exists.");
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
         }
     }
+
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

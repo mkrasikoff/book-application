@@ -11,6 +11,7 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   selectedUser: User | null = null;
   formUser: User = this.emptyUser();
+  errorMessage: string | null = null;
 
   constructor(private userService: UserService) { }
 
@@ -52,27 +53,26 @@ export class UserComponent implements OnInit {
       newUser => {
         this.users.push(newUser);
         this.formUser = this.emptyUser();
+        this.errorMessage = null;
       },
       error => {
-        if (error.status === 409) {
-          alert('Username or email already exists.');
-        } else {
-          console.error(error);
-        }
+        this.errorMessage = error.error.message || 'An error occurred';
       }
     );
   }
 
   updateUser(id: number, user: User): void {
-    this.userService.updateUser(id, user).subscribe(updatedUser => {
+    this.userService.updateUser(id, user).subscribe(
+      updatedUser => {
         const index = this.users.findIndex(u => u.id === id);
         if (index > -1) {
           this.users[index] = updatedUser;
           this.formUser = this.emptyUser();
+          this.errorMessage = null;
         }
       },
       error => {
-        console.error(error);
+        this.errorMessage = error.error.message || 'An error occurred';
       }
     );
   }

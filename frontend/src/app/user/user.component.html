@@ -13,6 +13,11 @@
     </div>
   </div>
 
+  <!-- Error Message Display -->
+  <div *ngIf="errorMessage" style="color: red; margin-bottom: 1em;">
+    {{ errorMessage }}
+  </div>
+
   <!-- Form to Create/Update User -->
   <form (ngSubmit)="createOrUpdateUser()" class="mt-4">
     <div class="form-group">

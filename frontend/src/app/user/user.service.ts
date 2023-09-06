@@ -44,9 +44,9 @@ export class UserService {
 
   private handleErrors(error: HttpErrorResponse): void {
     if (error.status === 400) {
-      alert("Validation Error: " + error.error);
+      console.log("Validation Error: " + error.error);
     } else if (error.status === 409) {
-      alert("Conflict: " + (error.error || 'Username or email already exists.'));
+      console.log("Conflict: " + (error.error || 'Username or email already exists.'));
     } else {
       console.error(error);
     }
