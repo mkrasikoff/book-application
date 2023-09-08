@@ -20,7 +20,7 @@ export class UserService {
     return this.http.post<User>(this.baseUrl, user).pipe(
       catchError((error: HttpErrorResponse) => {
         this.handleErrors(error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }
@@ -29,7 +29,7 @@ export class UserService {
     return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
       catchError((error: HttpErrorResponse) => {
         this.handleErrors(error);
-        return throwError(error);
+        return throwError(() => error);
       })
     );
   }

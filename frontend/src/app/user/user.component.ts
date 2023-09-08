@@ -30,10 +30,12 @@ export class UserComponent implements OnInit {
     };
   }
 
+  handleError(error: any): void {
+    this.errorMessage = error?.error?.message || 'An error occurred';
+  }
+
   getUser(id: number): void {
-    this.userService.getUser(id).subscribe(user => {
-      this.selectedUser = user;
-    });
+    this.userService.getUser(id).subscribe(user => this.selectedUser = user);
   }
 
   editUser(user: User): void {
@@ -41,11 +43,7 @@ export class UserComponent implements OnInit {
   }
 
   createOrUpdateUser(): void {
-    if (this.formUser.id) {
-      this.updateUser(this.formUser.id, this.formUser);
-    } else {
-      this.createUser(this.formUser);
-    }
+    this.formUser.id ? this.updateUser(this.formUser.id, this.formUser) : this.createUser(this.formUser);
   }
 
   createUser(user: User): void {
@@ -55,9 +53,7 @@ export class UserComponent implements OnInit {
         this.formUser = this.emptyUser();
         this.errorMessage = null;
       },
-      error => {
-        this.errorMessage = error.error.message || 'An error occurred';
-      }
+      error => this.handleError(error)
     );
   }
 
@@ -71,9 +67,7 @@ export class UserComponent implements OnInit {
           this.errorMessage = null;
         }
       },
-      error => {
-        this.errorMessage = error.error.message || 'An error occurred';
-      }
+      error => this.handleError(error)
     );
   }
 
@@ -87,8 +81,6 @@ export class UserComponent implements OnInit {
   }
 
   getAllUsers(): void {
-    this.userService.getAllUsers().subscribe(users => {
-      this.users = users;
-    });
+    this.userService.getAllUsers().subscribe(users => this.users = users);
   }
 }
