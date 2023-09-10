@@ -3,7 +3,9 @@ package com.mkrasikoff.bookservice.controller;
 import com.mkrasikoff.bookservice.entity.Book;
 import com.mkrasikoff.bookservice.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/books")
@@ -23,8 +28,15 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Book save(@RequestBody Book book) {
-        return bookService.save(book);
+    public ResponseEntity<?> save(@RequestBody Book book) {
+        try {
+            Book savedBook = bookService.save(book);
+            return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Conflict: Check your book data.");
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        }
     }
 
     @GetMapping("/{id}")

@@ -11,10 +11,12 @@ export class BookComponent implements OnInit {
   books: Book[] = [];
   selectedBook: Book | null = null;
   formBook: Book = this.emptyBook();
+  errorMessage: string | null = null;
 
   constructor(private bookService: BookService) { }
 
   ngOnInit(): void {
+    this.getAllUsers();
   }
 
   emptyBook(): Book {
@@ -30,10 +32,12 @@ export class BookComponent implements OnInit {
     };
   }
 
+  handleError(error: any): void {
+    this.errorMessage = error?.error?.message || 'An error occurred';
+  }
+
   getBook(id: number): void {
-    this.bookService.getBook(id).subscribe(book => {
-      this.selectedBook = book;
-    });
+    this.bookService.getBook(id).subscribe(book => this.selectedBook = book);
   }
 
   editBook(book: Book): void {
@@ -41,27 +45,32 @@ export class BookComponent implements OnInit {
   }
 
   createOrUpdateBook(): void {
-    if (this.formBook.id) {
-      this.updateBook(this.formBook.id, this.formBook);
-    } else {
-      this.createBook(this.formBook);
-    }
-    this.formBook = this.emptyBook();
+    this.formBook.id ? this.updateBook(this.formBook.id, this.formBook) : this.createBook(this.formBook);
   }
 
   createBook(book: Book): void {
-    this.bookService.createBook(book).subscribe(newBook => {
-      this.books.push(newBook);
-    });
+    this.bookService.createBook(book).subscribe(
+      newBook => {
+        this.books.push(newBook);
+        this.formBook = this.emptyBook();
+        this.errorMessage = null;
+      },
+      error => this.handleError(error)
+    );
   }
 
   updateBook(id: number, book: Book): void {
-    this.bookService.updateBook(id, book).subscribe(updatedBook => {
-      const index = this.books.findIndex(b => b.id === id);
-      if (index > -1) {
-        this.books[index] = updatedBook;
-      }
-    });
+    this.bookService.updateBook(id, book).subscribe(
+      updatedBook => {
+        const index = this.books.findIndex(b => b.id === id);
+        if (index > -1) {
+          this.books[index] = updatedBook;
+          this.formBook = this.emptyBook();
+          this.errorMessage = null;
+        }
+      },
+      error => this.handleError(error)
+    );
   }
 
   deleteBook(id: number): void {
@@ -71,5 +80,9 @@ export class BookComponent implements OnInit {
         this.books.splice(index, 1);
       }
     });
+  }
+
+  getAllUsers(): void {
+    this.bookService.getAllBooks().subscribe(books => this.books = books);
   }
 }

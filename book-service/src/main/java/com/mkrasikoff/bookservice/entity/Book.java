@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -21,6 +24,7 @@ public class Book {
     private long id;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 25, message = "Title must be between 3 and 25 characters.")
     private String title;
 
     private String authorId;
@@ -29,6 +33,8 @@ public class Book {
     private String description;
 
     @Column(nullable = false)
+    @Min(value = 1, message = "Rating must be at least 1")
+    @Max(value = 5, message = "Rating must be at most 5")
     private Double rating;
 
     private String imageUrl;
