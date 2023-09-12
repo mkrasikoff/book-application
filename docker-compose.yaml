@@ -17,6 +17,7 @@ services:
       - book-network
 
   book-service-api:
+    build: ./book-service
     image: book-service
     ports:
       - "8181:8080"
@@ -51,6 +52,7 @@ services:
       - user-network
 
   user-service-api:
+    build: ./user-service
     image: user-service
     ports:
       - "8182:8080"
@@ -73,6 +75,7 @@ services:
       - "8080:80"
     networks:
       - book-user-network
+
 networks:
   book-network:
   user-network:
