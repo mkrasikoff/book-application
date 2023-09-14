@@ -4,7 +4,7 @@ import com.mkrasikoff.bookservice.entity.Book;
 
 public interface BookService {
 
-    Book save(Book book);
+    Book save(Book book, Long userId);
 
     Book get(Long id);
 

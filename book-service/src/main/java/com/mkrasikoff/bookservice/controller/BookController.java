@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +30,9 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> save(@RequestBody Book book) {
+    public ResponseEntity<?> save(@RequestBody Book book, @RequestParam Long userId) {
         try {
-            Book savedBook = bookService.save(book);
+            Book savedBook = bookService.save(book, userId);
             return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
         } catch (DataIntegrityViolationException ex) {
             Map<String, String> error = new HashMap<>();

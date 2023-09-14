@@ -23,6 +23,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "userId", nullable = false)
+    private long userId;
+
     @Column(nullable = false)
     @Size(min = 3, max = 25, message = "Title must be between 3 and 25 characters.")
     private String title;
