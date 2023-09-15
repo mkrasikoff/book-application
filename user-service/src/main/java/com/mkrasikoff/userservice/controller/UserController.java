@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,6 @@ public class UserController {
         }
     }
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User get(@PathVariable Long id) {
@@ -63,5 +61,35 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAll() {
         return userService.getAll();
+    }
+
+    @GetMapping("/active")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> getActiveUser() {
+        User user = userService.getActiveUser();
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("No active user.", HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/active/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> setActiveUser(@PathVariable Long id) {
+        User user = userService.get(id);
+        if (user != null) {
+            userService.setActiveUser(id, true);
+            return new ResponseEntity<>("Active user set.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User not found.", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/validate/{id}")
+    public ResponseEntity<?> validateUser(@PathVariable Long id) {
+        if (userService.existsById(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

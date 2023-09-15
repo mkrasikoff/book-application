@@ -54,4 +54,22 @@ public class UserServiceImpl implements UserService {
 
         return userList;
     }
+
+    @Override
+    public User getActiveUser() {
+        return userRepository.findByIsActiveTrue()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NO_CONTENT, "No active user"));
+    }
+
+    @Override
+    public void setActiveUser(Long id, boolean isActive) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setActive(isActive);
+        userRepository.save(user);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
 }

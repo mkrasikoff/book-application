@@ -14,4 +14,10 @@ public interface UserService {
     User update(Long id, User newUser);
 
     List<User> getAll();
+
+    User getActiveUser();
+
+    void setActiveUser(Long id, boolean isActive);
+
+    boolean existsById(Long id);
 }
