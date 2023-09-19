@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user.model';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-users',
@@ -13,7 +14,7 @@ export class UserComponent implements OnInit {
   formUser: User = this.emptyUser();
   errorMessage: string | null = null;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
     this.getAllUsers();
@@ -35,7 +36,10 @@ export class UserComponent implements OnInit {
   }
 
   getUser(id: number): void {
-    this.userService.getUser(id).subscribe(user => this.selectedUser = user);
+    this.userService.getUser(id).subscribe(user => {
+      this.selectedUser = user;
+      this.sharedService.setSelectedUser(user);
+    });
   }
 
   editUser(user: User): void {

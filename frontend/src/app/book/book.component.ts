@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from './book.service';
 import { Book } from './book.model';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-books',
@@ -13,10 +14,17 @@ export class BookComponent implements OnInit {
   formBook: Book = this.emptyBook();
   errorMessage: string | null = null;
 
-  constructor(private bookService: BookService) { }
+  constructor(private bookService: BookService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.getAllUsers();
+    this.getAllBooks();
+    this.listenForSelectedBook();
+  }
+
+  listenForSelectedBook(): void {
+    this.sharedService.getSelectedUser().subscribe(book => {
+      this.selectedBook = book as Book | null;
+    });
   }
 
   emptyBook(): Book {
@@ -37,7 +45,10 @@ export class BookComponent implements OnInit {
   }
 
   getBook(id: number): void {
-    this.bookService.getBook(id).subscribe(book => this.selectedBook = book);
+    this.bookService.getBook(id).subscribe(book => {
+      this.selectedBook = book;
+      this.sharedService.setSelectedUser(book as any);
+    });
   }
 
   editBook(book: Book): void {
@@ -82,7 +93,7 @@ export class BookComponent implements OnInit {
     });
   }
 
-  getAllUsers(): void {
+  getAllBooks(): void {
     this.bookService.getAllBooks().subscribe(books => this.books = books);
   }
 }
