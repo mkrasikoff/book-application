@@ -6,8 +6,8 @@
           <h1 class="card-title display-4">Welcome to the Book Application!</h1>
           <p class="card-text lead">Choose an option:</p>
           <div class="btn-group mt-3" role="group">
-            <button type="button" class="btn btn-primary btn-lg" routerLink="/books">Book API</button>
-            <button type="button" class="btn btn-secondary btn-lg" routerLink="/users">User API</button>
+            <button type="button" class="btn btn-primary btn-lg" (click)="navigateTo('books')">Book API</button>
+            <button type="button" class="btn btn-secondary btn-lg" (click)="navigateTo('users')">User API</button>
           </div>
         </div>
       </div>
