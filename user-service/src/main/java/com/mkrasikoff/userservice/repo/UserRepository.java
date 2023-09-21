@@ -6,8 +6,16 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * UserRepository interface that extends the CrudRepository.
- * This provides CRUD functionality for the User entity.
+ * The UserRepository interface provides CRUD (Create, Read, Update, Delete)
+ * functionalities for the User entity by extending the CrudRepository
+ * interface provided by Spring Data JPA.
+ *
+ * By extending CrudRepository, it leverages default database operations
+ * such as save, delete, findById, and many others without the need for custom
+ * implementations.
+ *
+ * Use this repository interface to perform database operations related to the
+ * User entity.
  */
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
