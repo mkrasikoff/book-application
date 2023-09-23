@@ -1,14 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedService } from '../shared/shared.service';
+import { User } from '../user/user.model';
 
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
 })
-export class WelcomeComponent {
+export class WelcomeComponent implements OnInit {
+
+  user: User | null = null;
 
   constructor(private router: Router, private sharedService: SharedService) {}
+
+  ngOnInit(): void {
+    this.sharedService.getSelectedUser().subscribe(user => {
+      this.user = user;
+    });
+  }
 
   navigateTo(path: string): void {
     if (path === 'books') {

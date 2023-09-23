@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from './user.service';
 import { User } from './user.model';
 import { SharedService } from '../shared/shared.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -14,7 +15,7 @@ export class UserComponent implements OnInit {
   formUser: User = this.emptyUser();
   errorMessage: string | null = null;
 
-  constructor(private userService: UserService, private sharedService: SharedService) { }
+  constructor(private userService: UserService, private sharedService: SharedService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllUsers();
@@ -39,6 +40,7 @@ export class UserComponent implements OnInit {
     this.userService.getUser(id).subscribe(user => {
       this.selectedUser = user;
       this.sharedService.setSelectedUser(user);
+      this.router.navigate(['/']);
     });
   }
 

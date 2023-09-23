@@ -64,7 +64,7 @@
     <tr *ngFor="let user of users">
       <td>{{ user.username }}</td>
       <td>
-        <button (click)="getUser(user.id)" class="btn btn-info btn-sm">View</button>
+        <button (click)="getUser(user.id)" class="btn btn-info btn-sm">Login</button>
         <button (click)="editUser(user)" class="btn btn-warning btn-sm">Edit</button>
         <button (click)="deleteUser(user.id)" class="btn btn-danger btn-sm">Delete</button>
       </td>
