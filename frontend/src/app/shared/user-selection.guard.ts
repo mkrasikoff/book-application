@@ -17,8 +17,10 @@ export class UserSelectionGuard implements CanActivate {
     return new Observable(observer => {
       this.sharedService.getSelectedUser().subscribe(user => {
         if (user) {
+          console.log('User is selected, allowing navigation');
           observer.next(true);
         } else {
+          console.log('No user selected, redirecting to /users');
           observer.next(this.router.createUrlTree(['/users']));
         }
       });

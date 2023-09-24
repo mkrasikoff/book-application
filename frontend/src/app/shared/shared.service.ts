@@ -13,10 +13,12 @@ export class SharedService {
   constructor() { }
 
   setSelectedUser(user: User | null): void {
+    console.log('Setting user:', user);
     this.selectedUserSubject.next(user);
   }
 
   getSelectedUser(): Observable<User | null> {
+    console.log('Getting user:', this.selectedUserSubject.value);
     return this.selectedUser$;
   }
 }
