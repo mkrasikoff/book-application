@@ -14,20 +14,17 @@ export class WelcomeComponent implements OnInit {
   constructor(private router: Router, private sharedService: SharedService) {}
 
   ngOnInit(): void {
-    this.sharedService.getSelectedUser().subscribe(user => {
-      this.user = user;
-    });
+    this.user = this.sharedService.getSelectedUser();
   }
 
   navigateTo(path: string): void {
     if (path === 'books') {
-      this.sharedService.getSelectedUser().subscribe(user => {
-        if (user) {
-          this.router.navigate(['/books']);
-        } else {
-          alert('Please select a user before navigating to the Book API.');
-        }
-      });
+      const user = this.sharedService.getSelectedUser();
+      if (user) {
+        this.router.navigate(['/books']);
+      } else {
+        alert('Please select a user before navigating to the Book API.');
+      }
     } else {
       this.router.navigate([`/${path}`]);
     }

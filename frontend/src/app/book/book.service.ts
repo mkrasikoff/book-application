@@ -16,8 +16,9 @@ export class BookService {
     return this.http.get<Book>(`${this.baseUrl}/${id}`);
   }
 
-  createBook(book: Book): Observable<Book> {
-    return this.http.post<Book>(this.baseUrl, book).pipe(
+  createBook(book: Book, userId: number): Observable<Book> {
+    const url = `${this.baseUrl}?userId=${userId}`;
+    return this.http.post<Book>(url, book).pipe(
       catchError((error: HttpErrorResponse) => {
         this.handleErrors(error);
         return throwError(() => error);

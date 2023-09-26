@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookService } from './book.service';
 import { Book } from './book.model';
 import { SharedService } from '../shared/shared.service';
+import {User} from "../user/user.model";
 
 @Component({
   selector: 'app-books',
@@ -11,6 +12,7 @@ export class BookComponent implements OnInit {
 
   books: Book[] = [];
   selectedBook: Book | null = null;
+  selectedUser: User | null = null;
   formBook: Book = this.emptyBook();
   errorMessage: string | null = null;
 
@@ -18,13 +20,7 @@ export class BookComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllBooks();
-    this.listenForSelectedBook();
-  }
-
-  listenForSelectedBook(): void {
-    this.sharedService.getSelectedUser().subscribe(book => {
-      this.selectedBook = book as Book | null;
-    });
+    this.selectedUser = this.sharedService.getSelectedUser() as User | null;
   }
 
   emptyBook(): Book {
@@ -60,14 +56,18 @@ export class BookComponent implements OnInit {
   }
 
   createBook(book: Book): void {
-    this.bookService.createBook(book).subscribe(
-      newBook => {
-        this.books.push(newBook);
-        this.formBook = this.emptyBook();
-        this.errorMessage = null;
-      },
-      error => this.handleError(error)
-    );
+    if (this.selectedUser) {
+      this.bookService.createBook(book, this.selectedUser.id).subscribe(
+        newBook => {
+          this.books.push(newBook);
+          this.formBook = this.emptyBook();
+          this.errorMessage = null;
+        },
+        error => this.handleError(error)
+      );
+    } else {
+      this.errorMessage = 'No user selected';
+    }
   }
 
   updateBook(id: number, book: Book): void {

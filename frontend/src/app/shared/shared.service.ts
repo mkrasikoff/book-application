@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { User } from '../user/user.model';
-import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
 
-  private selectedUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  public selectedUser$: Observable<User | null> = this.selectedUserSubject.asObservable();
+  private selectedUser: User | null = null;
 
   constructor() { }
 
   setSelectedUser(user: User | null): void {
     console.log('Setting user:', user);
-    this.selectedUserSubject.next(user);
+    this.selectedUser = user;
   }
 
-  getSelectedUser(): Observable<User | null> {
-    console.log('Getting user:', this.selectedUserSubject.value);
-    return this.selectedUser$;
+  getSelectedUser(): User | null {
+    console.log('Getting user:', this.selectedUser);
+    return this.selectedUser;
   }
 }
