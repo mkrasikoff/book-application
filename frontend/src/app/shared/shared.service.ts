@@ -6,17 +6,20 @@ import { User } from '../user/user.model';
 })
 export class SharedService {
 
-  private selectedUser: User | null = null;
-
   constructor() { }
 
   setSelectedUser(user: User | null): void {
     console.log('Setting user:', user);
-    this.selectedUser = user;
+    if (user) {
+      localStorage.setItem('selectedUser', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('selectedUser');
+    }
   }
 
   getSelectedUser(): User | null {
-    console.log('Getting user:', this.selectedUser);
-    return this.selectedUser;
+    console.log('Getting user from localStorage');
+    const userJson = localStorage.getItem('selectedUser');
+    return userJson ? JSON.parse(userJson) as User : null;
   }
 }

@@ -19,8 +19,13 @@ export class BookComponent implements OnInit {
   constructor(private bookService: BookService, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.getAllBooks();
-    this.selectedUser = this.sharedService.getSelectedUser() as User | null;
+    this.selectedUser = this.sharedService.getSelectedUser();
+
+    if (this.selectedUser) {
+      this.getAllBooks();
+    } else {
+      this.errorMessage = 'No user selected';
+    }
   }
 
   emptyBook(): Book {
@@ -94,6 +99,9 @@ export class BookComponent implements OnInit {
   }
 
   getAllBooks(): void {
-    this.bookService.getAllBooks().subscribe(books => this.books = books);
+    this.bookService.getAllBooks().subscribe(
+      books => this.books = books,
+      error => this.handleError(error)
+    );
   }
 }
