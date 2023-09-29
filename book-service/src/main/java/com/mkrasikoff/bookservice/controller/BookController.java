@@ -16,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,5 +56,11 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public Book update(@PathVariable Long id, @RequestBody Book book) {
         return bookService.update(id, book);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Book>> getAll() {
+        List<Book> books = bookService.getAll();
+        return ResponseEntity.ok(books);
     }
 }
