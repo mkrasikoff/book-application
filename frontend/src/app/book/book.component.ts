@@ -1,14 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BookService } from './book.service';
 import { Book } from './book.model';
 import { SharedService } from '../shared/shared.service';
-import {User} from "../user/user.model";
+import { User } from "../user/user.model";
+import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-books',
   templateUrl: './book.component.html'
 })
-export class BookComponent implements OnInit {
+export class BookComponent implements OnInit, OnDestroy {
 
   books: Book[] = [];
   selectedBook: Book | null = null;
@@ -16,15 +18,34 @@ export class BookComponent implements OnInit {
   formBook: Book = this.emptyBook();
   errorMessage: string | null = null;
 
-  constructor(private bookService: BookService, private sharedService: SharedService) { }
+  private routerSubscription: Subscription | null = null;
+
+  constructor(
+    private bookService: BookService,
+    private sharedService: SharedService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.selectedUser = this.sharedService.getSelectedUser();
-
     if (this.selectedUser) {
       this.getAllBooks();
-    } else {
-      this.errorMessage = 'No user selected';
+    }
+
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        if (this.selectedUser) {
+          this.getAllBooks();
+        } else {
+          this.errorMessage = 'No user selected';
+        }
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
