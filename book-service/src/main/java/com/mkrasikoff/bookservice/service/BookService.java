@@ -13,5 +13,5 @@ public interface BookService {
 
     Book update(Long id, Book book);
 
-    List<Book> getAll();
+    List<Book> getAllByUserId(Long userId);
 }

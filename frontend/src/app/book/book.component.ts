@@ -29,13 +29,13 @@ export class BookComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.selectedUser = this.sharedService.getSelectedUser();
     if (this.selectedUser) {
-      this.getAllBooks();
+      this.getAllBooks(this.selectedUser.id);
     }
 
     this.routerSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (this.selectedUser) {
-          this.getAllBooks();
+          this.getAllBooks(this.selectedUser.id);
         } else {
           this.errorMessage = 'No user selected';
         }
@@ -119,8 +119,8 @@ export class BookComponent implements OnInit, OnDestroy {
     });
   }
 
-  getAllBooks(): void {
-    this.bookService.getAllBooks().subscribe(
+  getAllBooks(userId: number): void {
+    this.bookService.getAllBooks(userId).subscribe(
       books => this.books = books,
       error => this.handleError(error)
     );
