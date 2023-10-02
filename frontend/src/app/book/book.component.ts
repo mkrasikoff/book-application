@@ -119,6 +119,16 @@ export class BookComponent implements OnInit, OnDestroy {
     });
   }
 
+  deleteAllBooks(): void {
+    this.bookService.deleteAllBooks().subscribe(
+      () => {
+        this.books = [];
+        this.errorMessage = null;
+      },
+      error => this.handleError(error)
+    );
+  }
+
   getAllBooks(userId: number): void {
     this.bookService.getAllBooks(userId).subscribe(
       books => this.books = books,

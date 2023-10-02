@@ -63,4 +63,9 @@ public class BookController {
         List<Book> books = bookService.getAllByUserId(userId);
         return ResponseEntity.ok(books);
     }
+
+    @DeleteMapping
+    public void deleteAllBooks() {
+        bookService.deleteAllBooks();
+    }
 }

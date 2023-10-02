@@ -39,6 +39,15 @@ export class BookService {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
 
+  deleteAllBooks(): Observable<void> {
+    return this.http.delete<void>(this.baseUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.handleErrors(error);
+        return throwError(() => error);
+      })
+    );
+  }
+
   getAllBooks(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.baseUrl}?userId=${userId}`);
   }
