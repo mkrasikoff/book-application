@@ -3,6 +3,7 @@ package com.mkrasikoff.bookservice.service;
 import com.mkrasikoff.bookservice.entity.Book;
 import com.mkrasikoff.bookservice.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -53,7 +54,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteAllBooks() {
-        bookRepository.deleteAll();
+    public void deleteAllBooksByUserId(Long userId) {
+        List<Book> booksToDelete = bookRepository.findByUserId(userId);
+        for(Book book : booksToDelete) {
+            try {
+                bookRepository.delete(book);
+            } catch(EmptyResultDataAccessException e) {
+                // Log the error but continue deleting the other books
+                // log.warn("Attempted to delete book with ID {} but it was not found.", book.getId());
+            }
+        }
     }
 }

@@ -65,7 +65,7 @@ public class BookController {
     }
 
     @DeleteMapping
-    public void deleteAllBooks() {
-        bookService.deleteAllBooks();
+    public void deleteAllBooksByUserId(@RequestParam Long userId) {
+        bookService.deleteAllBooksByUserId(userId);
     }
 }
