@@ -139,4 +139,8 @@ export class BookComponent implements OnInit, OnDestroy {
       error => this.handleError(error)
     );
   }
+
+  navigateToWelcome(): void {
+    this.router.navigate(['/']);
+  }
 }
