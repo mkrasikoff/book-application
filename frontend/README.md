@@ -46,7 +46,7 @@ The main folders in the project are:
 1. **src/app**: Contains the main components, services, and models for the application.
 2. **book**: Components and services related to book management.
 3. **user**: Components and services related to user management.
-4. **welcome**: The welcome page component.
+4. **home**: The home page component.
 
 ## Testing
 

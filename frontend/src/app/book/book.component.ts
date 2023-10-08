@@ -140,7 +140,7 @@ export class BookComponent implements OnInit, OnDestroy {
     );
   }
 
-  navigateToWelcome(): void {
+  navigateToHome(): void {
     this.router.navigate(['/']);
   }
 }

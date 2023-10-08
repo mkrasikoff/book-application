@@ -4,10 +4,10 @@ import { SharedService } from '../shared/shared.service';
 import { User } from '../user/user.model';
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
 })
-export class WelcomeComponent implements OnInit {
+export class HomeComponent implements OnInit {
 
   user: User | null = null;
 
