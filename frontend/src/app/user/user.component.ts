@@ -89,4 +89,8 @@ export class UserComponent implements OnInit {
   getAllUsers(): void {
     this.userService.getAllUsers().subscribe(users => this.users = users);
   }
+
+  navigateToHome(): void {
+    this.router.navigate(['/']);
+  }
 }
