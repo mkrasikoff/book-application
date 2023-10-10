@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-books',
-  templateUrl: './book.component.html'
+  templateUrl: './book.component.html',
+  styleUrls: ['./book.component.css']
 })
 export class BookComponent implements OnInit, OnDestroy {
 
