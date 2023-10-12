@@ -12,7 +12,9 @@ spring:
     properties.hibernate.format_sql: true
 
   kafka:
-    bootstrap-servers=kafka:9093
+    bootstrap-servers: kafka:9093
+    consumer:
+      group-id: book-service
 
 server:
   port: 8080
