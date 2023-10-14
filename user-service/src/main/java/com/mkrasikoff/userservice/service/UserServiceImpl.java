@@ -14,10 +14,15 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserCreatedProducer userCreatedProducer;
 
     @Override
     public User save(User user) {
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        userCreatedProducer.sendUserId(savedUser.getId());
+
+        return userRepository.save(savedUser);
     }
 
     @Override
