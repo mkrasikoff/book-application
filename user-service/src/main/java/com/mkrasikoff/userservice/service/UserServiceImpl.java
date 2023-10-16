@@ -1,6 +1,7 @@
 package com.mkrasikoff.userservice.service;
 
 import com.mkrasikoff.userservice.entity.User;
+import com.mkrasikoff.userservice.producer.UserCreatedProducer;
 import com.mkrasikoff.userservice.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

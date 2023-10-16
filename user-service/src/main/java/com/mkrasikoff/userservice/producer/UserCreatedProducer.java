@@ -1,4 +1,4 @@
-package com.mkrasikoff.userservice.service;
+package com.mkrasikoff.userservice.producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

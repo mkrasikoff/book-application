@@ -13,6 +13,8 @@ spring:
 
   kafka:
     bootstrap-servers: kafka:9093
+    topic:
+      userCreated: user-created-topic
     consumer:
       group-id: book-service
 
