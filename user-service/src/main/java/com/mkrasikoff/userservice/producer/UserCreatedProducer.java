@@ -1,15 +1,13 @@
 package com.mkrasikoff.userservice.producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserCreatedProducer {
 
-    @Value("${kafka.topic.userCreated}")
-    private String userCreatedTopic;
+    private String userCreatedTopic = "user-created-topic";
 
     private final KafkaTemplate<String, Long> kafkaTemplate;
 

@@ -16,7 +16,7 @@ public class UserCreatedConsumer {
         this.bookService = bookService;
     }
 
-    @KafkaListener(topics = "${kafka.topic.userCreated}")
+    @KafkaListener(topics = "user-created-topic")
     public void handleUserCreated(Long userId) {
         for (int i = 0; i < 3; i++) {
             Book book = new Book();
