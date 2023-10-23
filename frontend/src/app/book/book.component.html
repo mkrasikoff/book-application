@@ -4,15 +4,15 @@
   <!-- Alert placeholder for showing messages (e.g. Book Created, Book Deleted) -->
   <div id="alert-placeholder"></div>
 
-  <!-- Displaying Selected Book -->
-  <div *ngIf="selectedBook" class="card mt-4">
-    <div class="card-body">
-      <h3 class="card-title">Selected Book</h3>
-      <p class="card-text"><strong>Title:</strong> {{ selectedBook.title }}</p>
-      <p class="card-text"><strong>Author ID:</strong> {{ selectedBook.authorId }}</p>
-      <p class="card-text"><strong>Description:</strong> {{ selectedBook.description }}</p>
-      <p class="card-text"><strong>Rating:</strong> {{ selectedBook.rating }}</p>
-      <img *ngIf="selectedBook.imageUrl" [src]="selectedBook.imageUrl" alt="{{ selectedBook.title }}" style="width: 200px; height: 315px; object-fit: cover;"/>
+  <!-- Modal for Displaying Selected Book -->
+  <div class="modal" id="bookModal">
+    <div class="modal-content">
+      <span class="close-btn" (click)="closeModal()">&times;</span>
+      <h3 class="modal-title">{{ selectedBook?.title }}</h3>
+      <img *ngIf="selectedBook?.imageUrl" [src]="selectedBook?.imageUrl" alt="{{ selectedBook?.title }}" style="width: 200px; height: 315px; object-fit: cover; margin-bottom: 15px;"/>
+      <p class="card-text"><strong>Author ID:</strong> {{ selectedBook?.authorId }}</p>
+      <p class="card-text"><strong>Description:</strong> {{ selectedBook?.description }}</p>
+      <p class="card-text"><strong>Rating:</strong> {{ selectedBook?.rating }}</p>
     </div>
   </div>
 

@@ -71,7 +71,18 @@ export class BookComponent implements OnInit, OnDestroy {
     this.bookService.getBook(id).subscribe(book => {
       this.selectedBook = book;
       this.sharedService.setSelectedUser(book as any);
+      const modal = document.getElementById('bookModal');
+      if (modal) {
+        modal.style.display = 'block';
+      }
     });
+  }
+
+  closeModal(): void {
+    const modal = document.getElementById('bookModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
   }
 
   editBook(book: Book): void {
