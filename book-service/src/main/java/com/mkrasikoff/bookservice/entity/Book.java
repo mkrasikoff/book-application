@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -30,7 +32,9 @@ public class Book {
     @Size(min = 3, max = 25, message = "Title must be between 3 and 25 characters.")
     private String title;
 
-    private String authorId;
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private Author author;
 
     @Column(length = 2000)
     private String description;

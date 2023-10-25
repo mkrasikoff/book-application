@@ -1,6 +1,8 @@
 package com.mkrasikoff.bookservice.service;
 
+import com.mkrasikoff.bookservice.entity.Author;
 import com.mkrasikoff.bookservice.entity.Book;
+import com.mkrasikoff.bookservice.repo.AuthorRepository;
 import com.mkrasikoff.bookservice.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -14,10 +16,19 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
     @Override
     public Book save(Book book, Long userId) {
         book.setUserId(userId);
+
+        // Temporary - Ensure the author exists before saving the book
+        if (book.getAuthor() != null && book.getAuthor().getId() != null) {
+            Author author = authorRepository.findById(book.getAuthor().getId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
+            book.setAuthor(author);
+        }
+
         return bookRepository.save(book);
     }
 
@@ -40,7 +51,14 @@ public class BookServiceImpl implements BookService {
     public Book update(Long id, Book newBook) {
         return bookRepository.findById(id).map(book -> {
             book.setTitle(newBook.getTitle());
-            book.setAuthorId(newBook.getAuthorId());
+
+            // Temporary - Set the author if it exists in the newBook
+            if (newBook.getAuthor() != null && newBook.getAuthor().getId() != null) {
+                Author author = authorRepository.findById(newBook.getAuthor().getId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
+                book.setAuthor(author);
+            }
+
             book.setDescription(newBook.getDescription());
             book.setRating(newBook.getRating());
             book.setImageUrl(newBook.getImageUrl());
