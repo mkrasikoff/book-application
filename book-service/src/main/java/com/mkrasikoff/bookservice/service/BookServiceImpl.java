@@ -21,15 +21,43 @@ public class BookServiceImpl implements BookService {
     @Override
     public Book save(Book book, Long userId) {
         book.setUserId(userId);
-
-        // Temporary - Ensure the author exists before saving the book
-        if (book.getAuthor() != null && book.getAuthor().getId() != null) {
-            Author author = authorRepository.findById(book.getAuthor().getId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
-            book.setAuthor(author);
-        }
+        setAuthorForBook(book);
 
         return bookRepository.save(book);
+    }
+
+    @Override
+    public Book update(Long id, Book newBook) {
+        return bookRepository.findById(id).map(book -> {
+            setAuthorForBook(newBook);
+
+            book.setTitle(newBook.getTitle());
+            book.setDescription(newBook.getDescription());
+            book.setRating(newBook.getRating());
+            book.setImageUrl(newBook.getImageUrl());
+
+            return bookRepository.save(book);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    private void setAuthorForBook(Book book) {
+        if (book.getAuthor() != null) {
+            Author author = book.getAuthor();
+            String name = author.getName();
+            String surname = author.getSurname();
+
+            Author existingAuthor = authorRepository.findByNameAndSurname(name, surname).orElse(null);
+
+            if (existingAuthor == null) {
+                Author newAuthor = new Author();
+                newAuthor.setName(name);
+                newAuthor.setSurname(surname);
+
+                existingAuthor = authorRepository.save(newAuthor);
+            }
+
+            book.setAuthor(existingAuthor);
+        }
     }
 
     @Override
@@ -45,25 +73,6 @@ public class BookServiceImpl implements BookService {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @Override
-    public Book update(Long id, Book newBook) {
-        return bookRepository.findById(id).map(book -> {
-            book.setTitle(newBook.getTitle());
-
-            // Temporary - Set the author if it exists in the newBook
-            if (newBook.getAuthor() != null && newBook.getAuthor().getId() != null) {
-                Author author = authorRepository.findById(newBook.getAuthor().getId())
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
-                book.setAuthor(author);
-            }
-
-            book.setDescription(newBook.getDescription());
-            book.setRating(newBook.getRating());
-            book.setImageUrl(newBook.getImageUrl());
-            return bookRepository.save(book);
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @Override
