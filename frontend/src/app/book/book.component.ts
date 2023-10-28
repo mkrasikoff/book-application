@@ -54,7 +54,11 @@ export class BookComponent implements OnInit, OnDestroy {
     return {
       id: 0,
       title: '',
-      authorId: '',
+      author: {
+        id: 0,
+        name: '',
+        surname: ''
+      },
       description: '',
       rating: 0,
       imageUrl: '',
