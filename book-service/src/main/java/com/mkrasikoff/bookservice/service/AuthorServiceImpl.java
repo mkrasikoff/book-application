@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class AuthorServiceImpl implements AuthorService {
     public Author get(Long id) {
         return authorRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Author not found"));
+    }
+
+    @Override
+    public Optional<Author> getByNameAndSurname(String name, String surname) {
+        return authorRepository.findByNameAndSurname(name, surname);
     }
 
     @Override

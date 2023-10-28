@@ -1,22 +1,29 @@
 package com.mkrasikoff.bookservice.consumer;
 
+import com.mkrasikoff.bookservice.entity.Author;
 import com.mkrasikoff.bookservice.entity.Book;
+import com.mkrasikoff.bookservice.service.AuthorService;
 import com.mkrasikoff.bookservice.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserCreatedConsumer {
 
     private final BookService bookService;
+    private final AuthorService authorService;
     private final Map<Integer, BookInfo> bookDefaults;
+    private static final String DEFAULT_AUTHOR_NAME = "Fyodor";
+    private static final String DEFAULT_AUTHOR_SURNAME = "Dostoevsky";
 
     @Autowired
-    public UserCreatedConsumer(BookService bookService) {
+    public UserCreatedConsumer(BookService bookService, AuthorService authorService) {
         this.bookService = bookService;
+        this.authorService = authorService;
 
         this.bookDefaults = new HashMap<>();
         bookDefaults.put(1, new BookInfo(
@@ -38,6 +45,8 @@ public class UserCreatedConsumer {
 
     @KafkaListener(topics = "user-created-topic")
     public void handleUserCreated(Long userId) {
+        Author dostoevsky = ensureDefaultAuthorExists();
+
         for (int i = 1; i <= 3; i++) {
             Book book = new Book();
             BookInfo bookInfo = bookDefaults.get(i);
@@ -46,11 +55,22 @@ public class UserCreatedConsumer {
             book.setDescription(bookInfo.description);
             book.setUserId(userId);
             book.setRating(5.0);
-            book.setAuthorId("1");
+            book.setAuthor(dostoevsky);
             book.setImageUrl(bookInfo.imageUrl);
 
             bookService.save(book, userId);
         }
+    }
+
+    private Author ensureDefaultAuthorExists() {
+        Optional<Author> existingAuthor = authorService.getByNameAndSurname(DEFAULT_AUTHOR_NAME, DEFAULT_AUTHOR_SURNAME);
+
+        return existingAuthor.orElseGet(() -> {
+            Author author = new Author();
+            author.setName(DEFAULT_AUTHOR_NAME);
+            author.setSurname(DEFAULT_AUTHOR_SURNAME);
+            return authorService.save(author);
+        });
     }
 
     private static class BookInfo {
