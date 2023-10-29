@@ -99,6 +99,7 @@ export class BookComponent implements OnInit, OnDestroy {
 
   createBook(book: Book): void {
     if (this.selectedUser) {
+      book.author.id = 0;
       this.bookService.createBook(book, this.selectedUser.id).subscribe(
         newBook => {
           this.books.push(newBook);
@@ -113,6 +114,7 @@ export class BookComponent implements OnInit, OnDestroy {
   }
 
   updateBook(id: number, book: Book): void {
+    book.author.id = 0;
     this.bookService.updateBook(id, book).subscribe(
       updatedBook => {
         const index = this.books.findIndex(b => b.id === id);
