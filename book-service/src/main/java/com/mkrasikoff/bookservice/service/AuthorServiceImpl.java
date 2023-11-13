@@ -16,7 +16,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author save(Author author) {
-        return authorRepository.save(author);
+        Optional<Author> existingAuthor = authorRepository.findByNameAndSurname(author.getName(), author.getSurname());
+        if (existingAuthor.isPresent()) {
+            // add logging in the future
+            return existingAuthor.get();
+        } else {
+            return authorRepository.save(author);
+        }
     }
 
     @Override

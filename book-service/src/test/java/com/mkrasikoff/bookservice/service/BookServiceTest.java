@@ -106,13 +106,17 @@ class BookServiceTest {
     @Test
     void save_whenNewAuthor_thenAuthorIsSaved() {
         Book book = new Book();
-        when(authorRepository.findByNameAndSurname(any(), any())).thenReturn(Optional.empty());
-        when(authorRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
-        when(bookRepository.save(any())).thenReturn(book);
+        Author newAuthor = new Author();
+        newAuthor.setName("New Author Name");
+        newAuthor.setSurname("New Author Surname");
+        book.setAuthor(newAuthor);
+        when(authorRepository.findByNameAndSurname(newAuthor.getName(), newAuthor.getSurname())).thenReturn(Optional.empty());
+        when(authorRepository.save(any(Author.class))).thenReturn(newAuthor);
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
 
         Book result = bookService.save(book, 1L);
 
-        verify(authorRepository).save(any(Author.class));
+        verify(authorRepository).save(newAuthor);
         assertEquals(book, result);
     }
 
