@@ -17,8 +17,8 @@ public class UserCreatedConsumer {
     private final BookService bookService;
     private final AuthorService authorService;
     private final Map<Integer, BookInfo> bookDefaults;
-    private static final String DEFAULT_AUTHOR_NAME = "Fyodor";
-    private static final String DEFAULT_AUTHOR_SURNAME = "Dostoevsky";
+    public static final String DEFAULT_AUTHOR_NAME = "Fyodor";
+    public static final String DEFAULT_AUTHOR_SURNAME = "Dostoevsky";
 
     @Autowired
     public UserCreatedConsumer(BookService bookService, AuthorService authorService) {
