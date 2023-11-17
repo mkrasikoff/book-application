@@ -4,6 +4,8 @@ import com.mkrasikoff.bookservice.entity.Author;
 import com.mkrasikoff.bookservice.entity.Book;
 import com.mkrasikoff.bookservice.service.AuthorService;
 import com.mkrasikoff.bookservice.service.BookService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class UserCreatedConsumer {
     private final Map<Integer, BookInfo> bookDefaults;
     public static final String DEFAULT_AUTHOR_NAME = "Fyodor";
     public static final String DEFAULT_AUTHOR_SURNAME = "Dostoevsky";
+    private static final Logger log = LoggerFactory.getLogger(UserCreatedConsumer.class);
 
     @Autowired
     public UserCreatedConsumer(BookService bookService, AuthorService authorService) {
@@ -45,32 +48,39 @@ public class UserCreatedConsumer {
 
     @KafkaListener(topics = "user-created-topic")
     public void handleUserCreated(Long userId) {
-        Author dostoevsky = ensureDefaultAuthorExists();
+        try {
+            Author dostoevsky = ensureDefaultAuthorExists();
 
-        for (int i = 1; i <= 3; i++) {
-            Book book = new Book();
-            BookInfo bookInfo = bookDefaults.get(i);
+            bookDefaults.forEach((key, bookInfo) -> {
+                Book book = new Book();
 
-            book.setTitle(bookInfo.title);
-            book.setDescription(bookInfo.description);
-            book.setUserId(userId);
-            book.setRating(5.0);
-            book.setAuthor(dostoevsky);
-            book.setImageUrl(bookInfo.imageUrl);
+                book.setTitle(bookInfo.title);
+                book.setDescription(bookInfo.description);
+                book.setUserId(userId);
+                book.setRating(5.0);
+                book.setAuthor(dostoevsky);
+                book.setImageUrl(bookInfo.imageUrl);
 
-            bookService.save(book, userId);
+                bookService.save(book, userId);
+            });
+        } catch (Exception e) {
+            log.error("Error handling user created for user ID {}: ", userId, e);
         }
     }
 
     private Author ensureDefaultAuthorExists() {
-        Optional<Author> existingAuthor = authorService.getByNameAndSurname(DEFAULT_AUTHOR_NAME, DEFAULT_AUTHOR_SURNAME);
-
-        return existingAuthor.orElseGet(() -> {
-            Author author = new Author();
-            author.setName(DEFAULT_AUTHOR_NAME);
-            author.setSurname(DEFAULT_AUTHOR_SURNAME);
-            return authorService.save(author);
-        });
+        try {
+            Optional<Author> existingAuthor = authorService.getByNameAndSurname(DEFAULT_AUTHOR_NAME, DEFAULT_AUTHOR_SURNAME);
+            return existingAuthor.orElseGet(() -> {
+                Author author = new Author();
+                author.setName(DEFAULT_AUTHOR_NAME);
+                author.setSurname(DEFAULT_AUTHOR_SURNAME);
+                return authorService.save(author);
+            });
+        } catch (Exception e) {
+            log.error("Error ensuring default author exists: ", e);
+            throw e;
+        }
     }
 
     private static class BookInfo {

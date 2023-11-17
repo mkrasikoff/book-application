@@ -5,6 +5,8 @@ import com.mkrasikoff.bookservice.entity.Book;
 import com.mkrasikoff.bookservice.repo.AuthorRepository;
 import com.mkrasikoff.bookservice.repo.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,12 +19,12 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private static final Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Override
     public Book save(Book book, Long userId) {
         book.setUserId(userId);
         setAuthorForBook(book);
-
         return bookRepository.save(book);
     }
 
@@ -30,14 +32,15 @@ public class BookServiceImpl implements BookService {
     public Book update(Long id, Book newBook) {
         return bookRepository.findById(id).map(book -> {
             setAuthorForBook(newBook);
-
             book.setTitle(newBook.getTitle());
             book.setDescription(newBook.getDescription());
             book.setRating(newBook.getRating());
             book.setImageUrl(newBook.getImageUrl());
-
             return bookRepository.save(book);
-        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        }).orElseThrow(() -> {
+            log.error("Failed to update book with ID '{}': Not Found", id);
+            return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        });
     }
 
     private void setAuthorForBook(Book book) {
@@ -62,17 +65,19 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book get(Long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return bookRepository.findById(id).orElseThrow(() -> {
+                    log.error("Failed to fetch book with ID '{}': Not Found", id);
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+                });
     }
 
     @Override
     public void delete(Long id) {
-        if (bookRepository.existsById(id)) {
-            bookRepository.deleteById(id);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (!bookRepository.existsById(id)) {
+            log.error("Failed to delete book with ID '{}': Not Found", id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
         }
+        bookRepository.deleteById(id);
     }
 
     @Override
@@ -83,12 +88,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteAllBooksByUserId(Long userId) {
         List<Book> booksToDelete = bookRepository.findByUserId(userId);
-        for(Book book : booksToDelete) {
+        for (Book book : booksToDelete) {
             try {
                 bookRepository.delete(book);
-            } catch(EmptyResultDataAccessException e) {
-                // Log the error but continue deleting the other books
-                // log.warn("Attempted to delete book with ID {} but it was not found.", book.getId());
+            } catch (EmptyResultDataAccessException e) {
+                log.error("Failed to delete book during bulk delete operation: Book with ID '{}' Not Found", book.getId(), e);
             }
         }
     }
