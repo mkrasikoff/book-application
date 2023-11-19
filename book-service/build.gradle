@@ -30,7 +30,7 @@ dependencies {
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
 	implementation 'org.slf4j:slf4j-api:1.7.30'
-	implementation 'ch.qos.logback:logback-classic:1.2.3'
+	implementation 'ch.qos.logback:logback-classic:1.2.9'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
