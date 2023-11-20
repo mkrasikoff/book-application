@@ -35,8 +35,6 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Set executable permissions for gradlew
-        run: chmod +x ./user-service/gradlew
       - name: Build with Gradle
-        run: ./user-service/gradlew build --no-daemon
-        working-directory: ./user-service
+        run: gradle build --no-daemon
+        working-directory: user-service
