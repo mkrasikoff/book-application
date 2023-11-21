@@ -3,10 +3,14 @@ name: Book Service CI
 on:
   push:
     paths:
+      - 'user-service/**'
       - 'book-service/**'
+      - 'frontend/**'
   pull_request:
     paths:
+      - 'user-service/**'
       - 'book-service/**'
+      - 'frontend/**'
   workflow_dispatch:
 
 jobs:
