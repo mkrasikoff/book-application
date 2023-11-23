@@ -1,17 +1,10 @@
-# Book Social Service Application (Java, Spring Boot, Angular)
+# Book Social Service Application (Java / Spring Boot / Angular)
 
-This repository represents a Book Application where multiple users can be created, each capable of adding their own books and associated information. The application follows a microservices architecture, comprising several components and leveraging technologies like Java, Spring Boot, Kafka, with the frontend developed using Angular. Currently, it supports features such as adding new users, editing book information, displaying a list of books with their images, deleting users and their data, and data validation.
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Prerequisites](#prerequisites)
-3. [Getting Started](#getting-started)
-4. [Port Conventions](#port-conventions)
-5. [Service Ports](#service-ports)
-6. [Networks](#networks)
+![Application Screenshot](resources%2Fapplication_screenshot.png)
 
 ## Overview
+
+This repository represents a Book Application where multiple users can be created, each capable of adding their own books and associated information. The application follows a microservices architecture, comprising several components and leveraging technologies like Java, Spring Boot, Kafka, with the frontend developed using Angular. It supports features such as adding new users, editing book information, displaying a list of books with their images, deleting users and their data, and data validation. Continuous Integration (CI) via GitHub Actions, comprehensive logging, and unit testing enhance the application's reliability and maintainability.
 
 - **Book Service**: Java application developed using Spring Boot for managing books.
 - **User Service**: Java application developed using Spring Boot for managing users.
@@ -69,7 +62,15 @@ Here is the mapping of each service to its accessible port:
 - `book-user-network`: For services that interact between books and users.
 - `kafka-network`: For Kafka and Zookeeper interactions.
 
-You can access the frontend at http://localhost:8080.
+## Continuous Integration and Testing
+
+The project is configured with GitHub Actions for Continuous Integration, automatically running tests on every push and pull request to ensure code integrity and functionality. Every backend service is accompanied by a suite of unit tests, verifying the correctness of the application logic.
+
+You can access the frontend at http://localhost:8080 to check application.
+
+## Logging
+
+Comprehensive logging has been implemented across all services, enhancing the observability and debuggability of the application. This feature is crucial for monitoring the application's health and troubleshooting potential issues.
 
 ## Stopping services
 
