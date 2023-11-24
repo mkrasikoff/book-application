@@ -68,3 +68,10 @@
   right: 15px;
   cursor: pointer;
 }
+
+.book-image {
+  cursor: pointer;
+  width: 100px;
+  height: 157.5px;
+  object-fit: cover;
+}

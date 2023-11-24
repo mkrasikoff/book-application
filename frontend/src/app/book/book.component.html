@@ -76,10 +76,10 @@
   <!-- List of Books -->
   <div class="books-container mt-5">
     <div *ngFor="let book of books" class="book">
-      <img *ngIf="book.imageUrl" [src]="book.imageUrl" alt="{{ book.title }}" style="width: 100px; height: 157.5px; object-fit: cover;">
+      <img *ngIf="book.imageUrl" [src]="book.imageUrl" alt="{{ book.title }}" class="book-image"
+           (click)="getBook(book.id)">
       <p style="margin: 10px 0;">{{ book.title }}</p>
       <div class="buttons">
-        <button (click)="getBook(book.id)" class="btn btn-info btn-sm">View</button>
         <button (click)="editBook(book)" class="btn btn-warning btn-sm">Edit</button>
         <button (click)="deleteBook(book.id)" class="btn btn-danger btn-sm">Delete</button>
       </div>
