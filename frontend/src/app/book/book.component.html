@@ -5,8 +5,8 @@
   <div id="alert-placeholder"></div>
 
   <!-- Modal for Displaying Selected Book -->
-  <div class="modal" id="bookModal">
-    <div class="modal-content">
+  <div class="modal" id="bookModal" (click)="closeModal($event)">
+    <div class="modal-content" (click)="$event.stopPropagation()">
       <span class="close-btn" (click)="closeModal()">&times;</span>
       <h3 class="modal-title">{{ selectedBook?.title }}</h3>
       <img *ngIf="selectedBook?.imageUrl" [src]="selectedBook?.imageUrl" alt="{{ selectedBook?.title }}" style="width: 200px; height: 315px; object-fit: cover; margin-bottom: 15px;"/>

@@ -82,10 +82,20 @@ export class BookComponent implements OnInit, OnDestroy {
     });
   }
 
-  closeModal(): void {
-    const modal = document.getElementById('bookModal');
-    if (modal) {
-      modal.style.display = 'none';
+  closeModal(event?: MouseEvent): void {
+    // Checking if the click was on a modal background
+    if (event && (event.target as Element).classList.contains('modal')) {
+      const modal = document.getElementById('bookModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
+    }
+    // If the click was on the cross, just close the modal window
+    else if (!event) {
+      const modal = document.getElementById('bookModal');
+      if (modal) {
+        modal.style.display = 'none';
+      }
     }
   }
 
