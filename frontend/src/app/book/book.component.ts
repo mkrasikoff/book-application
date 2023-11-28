@@ -74,7 +74,6 @@ export class BookComponent implements OnInit, OnDestroy {
   getBook(id: number): void {
     this.bookService.getBook(id).subscribe(book => {
       this.selectedBook = book;
-      this.sharedService.setSelectedUser(book as any);
       const modal = document.getElementById('bookModal');
       if (modal) {
         modal.style.display = 'block';
@@ -83,15 +82,10 @@ export class BookComponent implements OnInit, OnDestroy {
   }
 
   closeModal(event?: MouseEvent): void {
-    // Checking if the click was on a modal background
-    if (event && (event.target as Element).classList.contains('modal')) {
-      const modal = document.getElementById('bookModal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-    }
-    // If the click was on the cross, just close the modal window
-    else if (!event) {
+    // Checking if the click was on the modal background or the close button
+    if (event && ((event.target as Element).classList.contains('modal') || (event.target as Element).classList.contains('close-btn'))) {
+      this.selectedBook = null;
+      // Close the modal window
       const modal = document.getElementById('bookModal');
       if (modal) {
         modal.style.display = 'none';
