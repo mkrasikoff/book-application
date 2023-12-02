@@ -14,15 +14,14 @@
   padding-bottom: 40px;
 }
 
-.buttons {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  background-color: rgba(255, 255, 255, 0.7);
-  padding: 5px 0;
+.edit-btn, .delete-btn {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.edit-btn img, .delete-btn img {
+  width: 24px;
+  height: 24px;
 }
 
 .card {
