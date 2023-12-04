@@ -54,8 +54,15 @@ public class BookController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Book update(@PathVariable Long id, @RequestBody Book book) {
-        return bookService.update(id, book);
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Book book) {
+        try {
+            Book updatedBook = bookService.update(id, book);
+            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+        } catch (Exception ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("message", "Error updating book.");
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping

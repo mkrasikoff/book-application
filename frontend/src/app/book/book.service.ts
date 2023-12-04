@@ -27,10 +27,10 @@ export class BookService {
   }
 
   updateBook(id: number, book: Book): Observable<Book> {
-    return this.http.put<Book>(this.baseUrl, book).pipe(
+    return this.http.put<Book>(`${this.baseUrl}/${id}`, book).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.handleErrors(error);
-        return throwError(() => error);
+        console.error('An error occurred:', error.error);
+        return throwError(() => new Error('Could not update the book.'));
       })
     );
   }
