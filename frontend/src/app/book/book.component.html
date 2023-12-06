@@ -30,6 +30,11 @@
     {{ errorMessage }}
   </div>
 
+  <!-- Success Message Display -->
+  <div *ngIf="successMessage" style="color: green; margin-bottom: 1em;">
+    {{ successMessage }}
+  </div>
+
   <!-- Form to Create/Update Book -->
   <form (ngSubmit)="createOrUpdateBook()" id="book-form" class="mt-4">
     <div class="form-group">

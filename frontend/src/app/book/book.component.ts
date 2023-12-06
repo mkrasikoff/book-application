@@ -17,6 +17,7 @@ export class BookComponent implements OnInit, OnDestroy {
   selectedUser: User | null = null;
   formBook: Book = this.emptyBook();
   errorMessage: string | null = null;
+  successMessage: string | null = null;
 
   @ViewChild('bookModal') bookModal!: ElementRef;
 
@@ -113,11 +114,13 @@ export class BookComponent implements OnInit, OnDestroy {
           this.books.push(newBook);
           this.formBook = this.emptyBook();
           this.errorMessage = null;
+          this.successMessage = 'Book has been successfully created.';
         },
         error => this.handleError(error)
       );
     } else {
       this.errorMessage = 'No user selected';
+      this.successMessage = null;
     }
   }
 
@@ -131,12 +134,14 @@ export class BookComponent implements OnInit, OnDestroy {
             this.books[index] = updatedBook;
             this.formBook = this.emptyBook();
             this.errorMessage = null;
+            this.successMessage = 'Book has been successfully updated.';
           }
         },
         error => this.handleError(error)
       );
     } else {
       this.errorMessage = 'No user selected';
+      this.successMessage = null;
     }
   }
 
