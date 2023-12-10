@@ -65,6 +65,12 @@ public class BookController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<Book>> getAllBooks() {
+        List<Book> books = bookService.getAllBooks();
+        return ResponseEntity.ok(books);
+    }
+
     @GetMapping
     public ResponseEntity<List<Book>> getAllByUserId(@RequestParam Long userId) {
         List<Book> books = bookService.getAllByUserId(userId);

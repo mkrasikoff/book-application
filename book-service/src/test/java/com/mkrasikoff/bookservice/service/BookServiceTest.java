@@ -155,6 +155,27 @@ class BookServiceTest {
     }
 
     @Test
+    void getAllBooks_whenBooksExist_thenAllBooksAreReturned() {
+        List<Book> expectedBooks = Arrays.asList(new Book(), new Book());
+        when(bookRepository.findAll()).thenReturn(expectedBooks);
+
+        List<Book> result = bookService.getAllBooks();
+
+        assertEquals(expectedBooks, result);
+        verify(bookRepository).findAll();
+    }
+
+    @Test
+    void getAllBooks_whenNoBooksExist_thenReturnsEmptyList() {
+        when(bookRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<Book> result = bookService.getAllBooks();
+
+        assertTrue(result.isEmpty());
+        verify(bookRepository).findAll();
+    }
+
+    @Test
     void getAllByUserId_whenNoBooks_thenReturnsEmptyList() {
         when(bookRepository.findByUserId(any())).thenReturn(Collections.emptyList());
 

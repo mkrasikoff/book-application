@@ -13,6 +13,8 @@ public interface BookService {
 
     Book update(Long id, Book book);
 
+    List<Book> getAllBooks();
+
     List<Book> getAllByUserId(Long userId);
 
     void deleteAllBooksByUserId(Long userId);
