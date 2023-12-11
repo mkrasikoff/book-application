@@ -167,7 +167,7 @@ export class BookComponent implements OnInit, OnDestroy {
   }
 
   getAllBooks(userId: number): void {
-    this.bookService.getAllBooks(userId).subscribe(
+    this.bookService.getAllUserBooks(userId).subscribe(
       books => this.books = books,
       error => this.handleError(error)
     );

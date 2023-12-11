@@ -25,6 +25,8 @@ export class HomeComponent implements OnInit {
       } else {
         alert('Please select a user before navigating to the Book API.');
       }
+    } else if (path === 'all-books') {
+      this.router.navigate(['/all-books']);
     } else {
       this.router.navigate([`/${path}`]);
     }

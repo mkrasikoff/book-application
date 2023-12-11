@@ -48,7 +48,11 @@ export class BookService {
     );
   }
 
-  getAllBooks(userId: number): Observable<Book[]> {
+  getAllBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.baseUrl}/all`);
+  }
+
+  getAllUserBooks(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.baseUrl}?userId=${userId}`);
   }
 
