@@ -16,9 +16,6 @@
     </div>
   </div>
 
-  <!-- Return to Home Page button -->
-  <button (click)="navigateToHome()" class="btn btn-secondary btn-block mt-2">Return to Home Page</button>
-
   <!-- List of Books -->
   <div class="books-container mt-5">
     <div *ngFor="let book of books" class="book">
@@ -27,4 +24,7 @@
       <p style="margin: 10px 0;">{{ book.title }}</p>
     </div>
   </div>
+
+  <!-- Return to Home Page button -->
+  <button (click)="navigateToHome()" class="btn btn-secondary btn-block mt-2">Return to Home Page</button>
 </div>

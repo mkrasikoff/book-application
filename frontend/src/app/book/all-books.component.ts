@@ -1,11 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { BookService } from '../book/book.service';
 import { Book } from '../book/book.model';
-import {Router} from "@angular/router";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-all-books',
   templateUrl: './all-books.component.html',
+  styleUrls: ['./book.component.css']
 })
 export class AllBooksComponent implements OnInit {
   books: Book[] = [];
