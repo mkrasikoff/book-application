@@ -2,8 +2,10 @@ package com.mkrasikoff.bookservice.service;
 
 import com.mkrasikoff.bookservice.entity.Author;
 import com.mkrasikoff.bookservice.entity.Book;
+import com.mkrasikoff.bookservice.entity.UniqueBook;
 import com.mkrasikoff.bookservice.repo.AuthorRepository;
 import com.mkrasikoff.bookservice.repo.BookRepository;
+import com.mkrasikoff.bookservice.repo.UniqueBookRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,13 +22,42 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final UniqueBookRepository uniqueBookRepository;
     private static final Logger log = LoggerFactory.getLogger(BookServiceImpl.class);
 
     @Override
     public Book save(Book book, Long userId) {
+        UniqueBook uniqueBook = findOrCreateUniqueBook(book);
+        updateUniqueBookRating(uniqueBook, book.getRating());
+        uniqueBookRepository.save(uniqueBook);
+
         book.setUserId(userId);
         setAuthorForBook(book);
         return bookRepository.save(book);
+    }
+
+    private UniqueBook findOrCreateUniqueBook(Book book) {
+        return uniqueBookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor())
+                .orElseGet(() -> createUniqueBook(book));
+    }
+
+    private UniqueBook createUniqueBook(Book book) {
+        UniqueBook newUniqueBook = new UniqueBook();
+
+        newUniqueBook.setTitle(book.getTitle());
+        newUniqueBook.setAuthor(book.getAuthor());
+        newUniqueBook.setDescription(book.getDescription());
+        newUniqueBook.setAverageRating(book.getRating());
+        newUniqueBook.setRatingCount(1);
+        newUniqueBook.setCreatedAt(LocalDateTime.now());
+
+        return uniqueBookRepository.save(newUniqueBook);
+    }
+
+    private void updateUniqueBookRating(UniqueBook uniqueBook, Double newRating) {
+        double totalRating = uniqueBook.getAverageRating() * uniqueBook.getRatingCount() + newRating;
+        uniqueBook.setRatingCount(uniqueBook.getRatingCount() + 1);
+        uniqueBook.setAverageRating(Math.round((totalRating / uniqueBook.getRatingCount()) * 100.0) / 100.0);
     }
 
     @Override

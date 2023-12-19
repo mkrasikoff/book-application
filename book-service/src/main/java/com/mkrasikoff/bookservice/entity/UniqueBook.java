@@ -1,5 +1,6 @@
 package com.mkrasikoff.bookservice.entity;
 
+import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 @Table(name = "unique_books")
 public class UniqueBook {
