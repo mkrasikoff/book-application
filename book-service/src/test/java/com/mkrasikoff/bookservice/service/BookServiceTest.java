@@ -2,8 +2,10 @@ package com.mkrasikoff.bookservice.service;
 
 import com.mkrasikoff.bookservice.entity.Author;
 import com.mkrasikoff.bookservice.entity.Book;
+import com.mkrasikoff.bookservice.entity.UniqueBook;
 import com.mkrasikoff.bookservice.repo.AuthorRepository;
 import com.mkrasikoff.bookservice.repo.BookRepository;
+import com.mkrasikoff.bookservice.repo.UniqueBookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -36,6 +39,9 @@ class BookServiceTest {
     @Mock
     private AuthorRepository authorRepository;
 
+    @Mock
+    private UniqueBookRepository uniqueBookRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -44,10 +50,17 @@ class BookServiceTest {
     @Test
     void save_whenCorrectBookIsGiven_thenBookWasSaved() {
         Book book = new Book();
-        when(bookRepository.save(any())).thenReturn(book);
+        book.setRating(5.0);
+        UniqueBook uniqueBook = new UniqueBook();
+        uniqueBook.setAverageRating(4.0);
+        uniqueBook.setRatingCount(1);
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
+        when(uniqueBookRepository.findByTitleAndAuthor(anyString(), any(Author.class))).thenReturn(Optional.of(uniqueBook));
+        when(uniqueBookRepository.save(any(UniqueBook.class))).thenReturn(uniqueBook);
 
         Book result = bookService.save(book, 1L);
 
+        verify(bookRepository).save(any(Book.class));
         assertEquals(book, result);
     }
 
@@ -105,31 +118,58 @@ class BookServiceTest {
 
     @Test
     void save_whenNewAuthor_thenAuthorIsSaved() {
-        Book book = new Book();
         Author newAuthor = new Author();
         newAuthor.setName("New Author Name");
         newAuthor.setSurname("New Author Surname");
+        Book book = new Book();
+        book.setTitle("New Book Title");
         book.setAuthor(newAuthor);
+        book.setRating(5.0);
+        UniqueBook uniqueBook = new UniqueBook();
+        uniqueBook.setAuthor(newAuthor);
+        uniqueBook.setAverageRating(4.0);
+        uniqueBook.setRatingCount(1);
+
+        when(uniqueBookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor())).thenReturn(Optional.empty());
+        when(uniqueBookRepository.save(any(UniqueBook.class))).thenReturn(uniqueBook);  // Return the uniqueBook for consistency
         when(authorRepository.findByNameAndSurname(newAuthor.getName(), newAuthor.getSurname())).thenReturn(Optional.empty());
         when(authorRepository.save(any(Author.class))).thenReturn(newAuthor);
         when(bookRepository.save(any(Book.class))).thenReturn(book);
 
         Book result = bookService.save(book, 1L);
 
+        verify(bookRepository).save(book);
         verify(authorRepository).save(newAuthor);
         assertEquals(book, result);
     }
 
     @Test
     void save_whenExistingAuthor_thenAuthorIsNotSavedAgain() {
+        Author author = new Author();
+        author.setName("Existing Author Name");
+        author.setSurname("Existing Author Surname");
         Book book = new Book();
-        when(authorRepository.findByNameAndSurname(any(), any())).thenReturn(Optional.of(new Author()));
+        book.setAuthor(author);
+        book.setTitle("Book Title");
+        book.setRating(4.0);
+        UniqueBook uniqueBook = new UniqueBook();
+        uniqueBook.setTitle("Book Title");
+        uniqueBook.setAuthor(author);
+        uniqueBook.setAverageRating(4.0);
+        uniqueBook.setRatingCount(1);
+
+        when(authorRepository.findByNameAndSurname(any(), any())).thenReturn(Optional.of(author));
         when(bookRepository.save(any())).thenReturn(book);
+        when(uniqueBookRepository.findByTitleAndAuthor(book.getTitle(), book.getAuthor()))
+                .thenReturn(Optional.of(uniqueBook));
 
         Book result = bookService.save(book, 1L);
 
         verify(authorRepository, never()).save(any(Author.class));
+        verify(uniqueBookRepository).save(uniqueBook);
         assertEquals(book, result);
+        assertEquals(4.0, uniqueBook.getAverageRating());
+        assertEquals(2, uniqueBook.getRatingCount());
     }
 
     @Test
