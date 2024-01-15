@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,6 +68,15 @@ class UserServiceTest {
         List<User> users = userService.getAll();
 
         assertEquals(expectedUsers.size(), users.size());
+    }
+
+    @Test
+    void getAll_whenNoUsers_thenReturnsEmptyList() {
+        when(userRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<User> users = userService.getAll();
+
+        assertTrue(users.isEmpty());
     }
 
     @Test
@@ -139,6 +149,14 @@ class UserServiceTest {
         verify(userRepository, times(2)).save(user);
         verify(userCreatedProducer).sendUserId(user.getId());
         assertNotNull(savedUser);
+    }
+
+    @Test
+    void save_whenRepositoryThrowsException_thenExceptionIsPropagated() {
+        User newUser = new User();
+        when(userRepository.save(any(User.class))).thenThrow(new RuntimeException("Database error"));
+
+        assertThrows(RuntimeException.class, () -> userService.save(newUser));
     }
 
     @Test
